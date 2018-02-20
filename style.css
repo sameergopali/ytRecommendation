@@ -1,0 +1,13 @@
+.next_btn{
+	color: white;
+    padding: 5px 5px;
+    max-height: 43px !important;
+    background: #fba009;
+    position: relative;
+    top: 32px;
+    min-width: 95px;
+    border: none;
+    border-radius: 7px;
+    font-size: 13px;
+	
+}

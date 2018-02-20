@@ -12,9 +12,11 @@ function insert_main() {
     })(window.document);
 }
 
+
+	
 	
 function insert(){
-
+	$( '<button data-role="button" class="next_btn"  >Add to queue1</a>').appendTo( '.style-scope ytd-compact-video-renderer' );
     var to_match = 'a[class="';
         to_match = to_match.concat("yt-simple-endpoint style-scope ytd-compact-video-renderer", '"]');
 	var links = document.querySelectorAll(to_match);
@@ -51,7 +53,15 @@ function insert(){
 	sendResponse({farewell: "goodbye"});}
     return true;
   });  */
+  
+ 
+(function($) {
+	$('.next_btn').on('click',function(){
+ //	var temp = $(this).previousSibling();
+	console.log("hello");
+});
 
+})(jQuery);
   
 
   
@@ -68,6 +78,7 @@ function process() {
  setTimeout(insert,2000);
 
 }
+
 window.addEventListener("message", function(request) { 
 
     if (request.data == "YourName_expectedMessage") //note that there are likely many script on the page or it's child frames that also send messages to this page, so you better name your message so that is unique in the entire world.
