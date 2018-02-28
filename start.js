@@ -12,68 +12,42 @@ function insert_main() {
     })(window.document);
 }
 
-
+$(document).on("click", ".next_btn", function(){
+    var alink = $(this).parent().find('a');
+	var ahref =  alink.attr('href');
+	var title = alink.find('h3').find('span').attr('title');
+	var data = { ref:ahref, name: title};
 	
 	
-function insert(){
-	$( '<button data-role="button" class="next_btn"  >Add to queue1</a>').appendTo( '.style-scope ytd-compact-video-renderer' );
-    var to_match = 'a[class="';
-        to_match = to_match.concat("yt-simple-endpoint style-scope ytd-compact-video-renderer", '"]');
-	var links = document.querySelectorAll(to_match);
-	for( i = 0; i < links.length; i++){
-		var link = links[i];
-	    //var video_link = link.href;
-		var video_title = link.querySelector('span').title;
-		console.log(video_title);
-		
-				if(i == 1 ){
-					var node = document.createElement("p");   
-					node.setAttribute("id", "playNext");
-					var textnode = document.createTextNode("Playing Next");        
-					node.appendChild(textnode);  
-					link.appendChild(node);
-					}	
-		
+	if( JSON.parse(localStorage.getItem('queue'))!= null)
+	{
+		var queue = JSON.parse(localStorage.getItem('queue'));
+		queue.push(data);
 	}
-	 playNext = links[1];
+	else{
+	   queue.push(data);
 	}
-
-
-	var playNext;
-
-	console.log("ok");
-	console.log(document.readyState);
-
-/* 	chrome.runtime.onMessage.addListener( 
-    function(request, sender, sendResponse) {
-	//setTimeout(insert,5000);
-    if (request.greeting == "hello"){
-		    console.log(document.readyState);
-
-	sendResponse({farewell: "goodbye"});}
-    return true;
-  });  */
-  
- 
-(function($) {
-	$('.next_btn').on('click',function(){
- //	var temp = $(this).previousSibling();
-	console.log("hello");
+	
+    localStorage.setItem('queue',JSON.stringify(queue));
+	
+	console.log(queue);
 });
 
-})(jQuery);
+
+function insert(){
+	$( '<button data-role="button" class="next_btn"  >Add to queue</a>').appendTo( '.style-scope ytd-compact-video-renderer' );					
+     }
   
+ 
+
 
   
-window.addEventListener("yt-navigate-finish", process); // new youtube design
-//window.addEventListener("load", process); // one-time late postprocessing 
+window.addEventListener("yt-navigate-finish", process); 
 
 function process() {
- //getPlayer();
  		var element = document.getElementById("playNext");
 		if(element != null)
 		element.parentNode.removeChild(element);
-
  setTimeout(insert_main,4000);
  setTimeout(insert,2000);
 
@@ -81,12 +55,49 @@ function process() {
 
 window.addEventListener("message", function(request) { 
 
+	console.log("entered on finsihed");
     if (request.data == "YourName_expectedMessage") //note that there are likely many script on the page or it's child frames that also send messages to this page, so you better name your message so that is unique in the entire world.
     { 
-		var element = document.getElementById("playNext");
-		element.parentNode.removeChild(element);
-		console.log("end");
-		playNext.click();
+	if( JSON.parse(localStorage.getItem('queue'))!= null){
+	
+		var queue = JSON.parse(localStorage.getItem('queue'));
+	
+	if(queue.length > 0){
+			var ahref = document.createElement("a");
+			ahref.setAttribute('href' , queue[0].ref);
+			ahref.click();
+			console.log(ahref);
+		    queue.splice(0,1);
+	localStorage.setItem('queue',JSON.stringify(queue));
+	}
+	
+	else{
+		console.log("found empty");
+	}
+	
+	}
+	
+
+	else{
+	 console.log("press add to queue");
+	}
+			
+		//	var a =  document.getElementsByClassName( "yt-simple-endpoint style-scope ytd-compact-video-renderer" )[2];
+		//	a.setAttribute('href' , queue[0].ref);
+		//	a =  document.getElementsByClassName( "yt-simple-endpoint style-scope ytd-compact-video-renderer" )[2];
+			//console.log(a);
+
+		   
+
+		  
+		
+		
+		//playNext.click();
     } 
 
 }, true);
+
+console.log("ok,in extension");
+var queue =[];
+
+
